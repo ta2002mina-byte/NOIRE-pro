@@ -1,0 +1,551 @@
+NOIRÉ — The Dining Experience Complete Development Phase Prompts —
+Next.js + Supabase
+
+Tagline: “Your table. Your taste. Your story.”
+
+GLOBAL RULES — APPLY TO EVERY PHASE
+
+1.  First inspect the existing project before making changes.
+2.  Reuse existing working code, components, authentication, database
+    utilities, styling, and configuration whenever possible.
+3.  Do NOT delete, replace, or rebuild working features without a clear
+    technical reason.
+4.  Do NOT create duplicate components, routes, tables, or utilities
+    when an existing implementation can be extended.
+5.  Use the Next.js + Supabase architecture already present in the
+    project.
+6.  Keep secrets server-side. Never expose SUPABASE_SERVICE_ROLE_KEY or
+    private credentials to the client.
+7.  Use Supabase RLS for customer/private data.
+8.  Validate sensitive operations on the server.
+9.  Never trust client-submitted prices, availability, permissions,
+    milestone status, or reservation totals.
+10. Include loading, empty, error, and success states.
+11. Make important flows responsive and mobile-first.
+12. Use semantic HTML, keyboard navigation, labels, focus states,
+    contrast, and reduced-motion support.
+13. Do not fabricate restaurant facts, sourcing, chef credentials,
+    nutrition, events, or availability.
+14. Use reusable, maintainable TypeScript components and utilities.
+15. After each phase, run relevant lint, type-check, and build checks.
+16. Complete ONLY the requested phase, then stop and wait for the next
+    instruction.
+
+PHASE 0 — PROJECT AUDIT
+
+PROMPT:
+
+You are working on an existing NOIRÉ restaurant project built with
+Next.js and Supabase.
+
+Before changing anything, perform a complete project audit.
+
+Inspect: - package.json - routes/app/pages - components - layouts -
+styling/theme - Supabase client/server utilities - authentication -
+middleware - database schema/migrations - environment variable usage -
+API/server actions - image/storage setup - existing admin area -
+customer/account area - responsive behavior - SEO setup - current
+build/lint/type-check status
+
+Identify: - completed features - partially implemented features -
+missing features - reusable code - technical risks - duplicated code -
+security concerns - database gaps
+
+NO CHANGES in this phase unless required for diagnostics.
+
+Create an implementation map for Phases 1–14.
+
+Do not rebuild anything. Do not delete working code. Do not create
+unnecessary files.
+
+Report: 1. Current architecture 2. Existing reusable features 3. Missing
+NOIRÉ features 4. Database status 5. Authentication status 6. Security
+issues 7. Recommended implementation order
+
+Stop after the audit.
+
+PHASE 1 — SUPABASE DATABASE
+
+PROMPT:
+
+Using the Phase 0 audit, implement the database foundation required for
+NOIRÉ.
+
+Create safe, idempotent Supabase migrations for missing tables only.
+
+Core tables: - profiles - restaurants - categories - menu_items -
+menu_item_ingredients - ingredients - ingredient_sources - tables -
+reservations - reservation_preferences - dining_experiences -
+dish_preferences - taste_profiles - favorites - reviews -
+dining_history - dining_journal - dining_passports -
+passport_milestones - chef_notes - restaurant_stories - gallery -
+notifications
+
+Important fields:
+
+menu_items: id, restaurant_id, category_id, name, slug, description,
+story, chef_note, price, image_url, spice_level, diet_type, is_featured,
+is_available, created_at, updated_at
+
+dish_preferences: id, menu_item_id, mood, flavor, texture, meal_type,
+occasion, spice_level
+
+reservations: id, restaurant_id, customer_id, table_id,
+reservation_date, reservation_time, guest_count, experience_id,
+occasion, special_request, status, created_at, updated_at
+
+dining_journal: id, customer_id, menu_item_id, order_id, personal_note,
+rating, visited_at
+
+restaurant_stories: id, restaurant_id, title, description, media_url,
+story_type, published_at, expires_at, is_active
+
+Requirements: - foreign keys - useful indexes - timestamps - unique
+constraints where appropriate - check constraints for ratings/statuses -
+safe cascading behavior - no duplicate records
+
+RLS: - customers can access only their own private data - public content
+is readable publicly where appropriate - admins can manage authorized
+restaurant data - never bypass RLS from the client
+
+If an existing table already supports a feature, extend it instead of
+creating a duplicate.
+
+Run migration/type/build checks.
+
+Stop after Phase 1.
+
+PHASE 2 — AUTHENTICATION & AUTHORIZATION
+
+PROMPT:
+
+Implement or improve secure Supabase authentication for NOIRÉ.
+
+Support: - customer signup - signin - signout - password reset - session
+persistence - protected customer routes - protected admin routes
+
+Customer routes: - /account - /account/profile - /account/journal -
+/account/passport - /account/favorites - /account/reviews -
+/account/reservations - /account/settings
+
+Admin routes: - /admin - /admin/reservations - /admin/menu -
+/admin/experiences - /admin/chef - /admin/ingredients - /admin/stories -
+/admin/customers - /admin/passport - /admin/reviews - /admin/analytics -
+/admin/settings
+
+Requirements: - enforce authorization server-side - do not rely only on
+hidden UI - protect APIs/server actions - respect RLS - prevent
+cross-customer data access - handle expired sessions - preserve existing
+working authentication - never expose private keys
+
+Run checks.
+
+Stop after Phase 2.
+
+PHASE 3 — PREMIUM / CINEMATIC PUBLIC UI
+
+PROMPT:
+
+Build the public NOIRÉ experience using the existing design system where
+possible.
+
+Brand: NOIRÉ Tagline: “Your table. Your taste. Your story.”
+
+Design: - premium dining - cinematic - elegant - editorial -
+sophisticated - modern - restrained animation - high-quality food
+imagery - strong typography - generous whitespace - mobile-first
+
+Homepage opening:
+
+NOIRÉ DINNER, REIMAGINED.
+
+[Discover Tonight]
+
+↓ Scroll to enter
+
+Homepage sections: 1. Cinematic hero 2. Tonight at NOIRÉ 3. Discover
+your mood 4. Find My Dish 5. Featured dishes 6. Choose Your Experience
+7. Source → Plate 8. Chef’s Desk 9. Tonight’s Stories 10. Restaurant
+spaces 11. Reservation CTA 12. Dining Journal / Passport teaser 13.
+Location and hours 14. Footer
+
+Public routes: - / - /menu - /menu/[slug] - /chef - /our-ingredients -
+/reserve - /space - /stories - /about - /contact
+
+Add responsive navigation, mobile navigation, loading/error/empty
+states, accessible interactions, lightweight animations, and
+reduced-motion support.
+
+Do not use fake claims for sourcing, chef credentials, or restaurant
+facts.
+
+Stop after Phase 3.
+
+PHASE 4 — MOOD-BASED MENU
+
+PROMPT:
+
+Implement NOIRÉ’s interactive mood-based menu.
+
+Question: “What are you in the mood for?”
+
+Options: - Something Light - Comfort Food - Spicy - Rich & Creamy -
+Chef’s Choice - Something New
+
+Support normal categories, search, filters, sorting, and dietary/spice
+information.
+
+Each dish shows: - image - name - short description - price - spice
+level - dietary information - featured/chef choice state - availability
+
+Use dish_preferences for recommendation attributes.
+
+Routes: - /menu - /menu/[slug]
+
+Requirements: - server-side availability - unavailable dishes must not
+appear orderable - URL-friendly slugs - mobile responsiveness -
+loading/error/empty states - SEO-friendly dish pages - do not fabricate
+ingredient or nutrition data
+
+Stop after Phase 4.
+
+PHASE 5 — FIND MY DISH
+
+PROMPT:
+
+Implement NOIRÉ’s “Find My Dish” personalization experience.
+
+Quiz: 1. Mood 2. Hunger level 3. Spice preference 4. Flavor/texture
+preference 5. Optional meal type 6. Optional occasion
+
+Example result: “Your Match: Truffle Chicken Pasta”
+
+Show: - recommended dish - why it matches - taste attributes - image -
+price - dietary information - availability - View Dish action -
+reservation/order action where appropriate
+
+Implementation: - start with deterministic rule-based matching - do not
+require an AI API initially - make the recommendation service extensible
+for future AI - keep scoring logic secure and maintainable
+
+Handle: - no-match results - ties - unavailable dishes - mobile/touch
+use - accessible controls - optional saving of taste preferences only
+for authenticated users - private data protection
+
+Do not claim recommendations are scientifically validated.
+
+Stop after Phase 5.
+
+PHASE 6 — VISUAL TABLE RESERVATION
+
+PROMPT:
+
+Implement NOIRÉ’s visual table reservation experience.
+
+Flow: 1. Date 2. Time 3. Guest count 4. Experience 5. Occasion 6.
+Preferences 7. Visual table selection 8. Special request 9. Confirmation
+
+Table types/areas may include: - Window - Quiet - Outdoor - Main Hall -
+Private Dining - Garden - Rooftop - Bar
+
+Statuses: - Pending - Confirmed - Completed - Cancelled - No-show
+
+Requirements: - visual floor plan - responsive mobile table map -
+server-side availability - server-side validation of date/time/guest
+count - prevent double booking and race conditions - re-check
+availability before confirmation - do not trust client-selected
+availability - admin-manageable tables/layout - special requests -
+occasions/preferences
+
+Celebration Mode: - Birthday - Anniversary - Proposal - Graduation -
+Other
+
+Preferences: - Window seat - Quiet - Outdoor - Birthday setup
+
+Never promise a table until the server confirms it.
+
+Stop after Phase 6.
+
+PHASE 7 — CHOOSE YOUR EXPERIENCE
+
+PROMPT:
+
+Implement NOIRÉ’s “Choose Your Experience” feature.
+
+Experiences: - Casual Dinner - Romantic Dinner - Family Gathering -
+Birthday - Business Dinner - Chef’s Experience
+
+Each experience can have: - title - description - image - recommended
+guest range - available areas - preparation notes - active/inactive
+status
+
+Connect the selected experience to reservations.
+
+Requirements: - admin-manageable experiences - no hardcoded production
+content when database content exists - server-side validation - inactive
+experiences handled gracefully - reservation integration - mobile-first
+premium cards
+
+Celebration Mode: - Birthday - Anniversary - Proposal - Graduation -
+Other
+
+Do not guarantee decorations/services unless configured and available.
+
+Stop after Phase 7.
+
+PHASE 8 — CUSTOMER DINING JOURNAL
+
+PROMPT:
+
+Implement the NOIRÉ Dining Journal.
+
+Customer route: - /account/journal
+
+Journal entries can contain: - dish tried - visit date - personal note -
+rating - optional order reference
+
+Features: - timeline/list - dish image - dish name - date - note -
+rating - edit - delete where appropriate - first-time empty state
+
+Privacy: - customers can read/write only their own journal entries -
+enforce RLS - derive authenticated user identity server-side - never
+trust customer_id from the browser - prevent cross-customer editing
+
+Use verified dining history for verified visit features.
+
+Stop after Phase 8.
+
+PHASE 9 — DINING PASSPORT
+
+PROMPT:
+
+Implement the NOIRÉ Dining Passport.
+
+Track: - visits - dishes explored - experiences - milestones
+
+Example milestones: - First Visit - Explorer - Food Lover - NOIRÉ
+Insider
+
+Critical: Milestones must not be client-manipulable.
+
+Derive progress from verified database records such as completed
+visits/orders/reservations according to defined business rules.
+
+Features: - passport dashboard - progress indicators - earned
+milestones - locked milestones - visit count - dishes explored -
+experiences completed - milestone details
+
+Requirements: - server-side calculations - idempotent milestone
+processing - no duplicate awards - correct cancelled/no-show handling -
+distinguish reservation from completed dining - RLS privacy
+
+Do not create fake achievements.
+
+Stop after Phase 9.
+
+PHASE 10 — CHEF’S DESK + SOURCE → PLATE
+
+PROMPT:
+
+Implement two storytelling features.
+
+PART A — CHEF’S DESK
+
+Public route: - /chef
+
+Support: - featured chef note - weekly ingredient/story - image - chef
+note - publish controls - optional scheduling
+
+Admin: - create - edit - publish - unpublish - schedule - archive
+
+PART B — SOURCE → PLATE
+
+Public route: - /our-ingredients
+
+Display factual information: - ingredient - source - season - harvest
+date where applicable - description - image - dishes using ingredient
+
+Admin manages ingredients, sources, seasonal information, and dish
+relationships.
+
+Critical: Do not fabricate supplier names, farm origins, sustainability
+claims, harvest dates, or provenance. Only display
+restaurant/admin-entered factual information.
+
+Use empty states when sourcing data is unavailable.
+
+Stop after Phase 10.
+
+PHASE 11 — ADMIN DASHBOARD
+
+PROMPT:
+
+Build the NOIRÉ admin dashboard using existing admin architecture.
+
+Navigation: - Overview - Tonight - Reservations - Menu - Experiences -
+Chef’s Desk - Ingredients - Stories - Customers - Dining Passport -
+Reviews - Analytics - Settings
+
+Overview: - reservations - guests - table occupancy - special
+occasions - experience breakdown - recent activity - operational alerts
+
+Tonight: - today’s reservations - upcoming guests - selected
+experiences - occasions - table status - special requests - active
+stories/content
+
+Menu management: - dish - story - chef note - ingredients - nutrition -
+spice - dietary tags - availability - feature flags - recommendation
+attributes
+
+Reservation management: - calendar - visual table map - date/time -
+guest count - experience - preference - occasion - special request -
+status
+
+Customer management: - visits - dishes tried - favorites - reviews -
+last visit - favorite experience
+
+Stories: - title - description - media - type - publish date - expiry
+date - active state
+
+Requirements: - secure admin authorization - server-side permission
+checks - RLS-compatible operations - validation - destructive-action
+confirmation - timestamps - pagination - search/filter/sort where
+appropriate
+
+Stop after Phase 11.
+
+PHASE 12 — ANALYTICS + TONIGHT’S STORIES
+
+PROMPT:
+
+Implement NOIRÉ analytics and dynamic storytelling.
+
+Analytics: - reservation volume - guests - visits - popular dishes -
+popular moods - experience breakdown - repeat visits - favorite dishes -
+journal activity - story engagement where measurable - table
+utilization - cancellation/no-show rate
+
+Taste Analytics: - popular moods - spice preferences - flavor/texture
+preferences - recommendation outcomes where available
+
+Experience Analytics: - experience selection - occasion distribution -
+reservation conversion where measurable
+
+Use efficient aggregation queries. Avoid unnecessary personally
+identifiable information. Restrict analytics to authorized roles.
+
+Tonight’s Stories: - kitchen stories - chef stories - dish stories -
+ingredient stories - behind-the-scenes - events
+
+Story fields: - published_at - expires_at - is_active - story_type
+
+“Tonight at NOIRÉ” should use current day/time and admin-managed
+content/schedules where relevant.
+
+Do not invent real-time events or claims.
+
+Use caching/revalidation where appropriate.
+
+Stop after Phase 12.
+
+PHASE 13 — SEO + PERFORMANCE + ACCESSIBILITY
+
+PROMPT:
+
+Perform a production-quality optimization pass.
+
+SEO: - metadata - title templates - descriptions - canonical URLs - Open
+Graph - social metadata where appropriate - sitemap - robots -
+structured data where applicable - accurate restaurant/local-business
+structured data - dish metadata - clean URLs - meaningful headings
+
+Performance: - optimize images - responsive image sizing - lazy loading
+where appropriate - minimize unnecessary client components - reduce
+JavaScript - avoid unnecessary database requests - cache/revalidate
+public content - optimize Supabase queries - add indexes where needed -
+paginate large admin/customer datasets
+
+Accessibility: - semantic HTML - keyboard navigation - accessible
+dialogs - form labels - focus management - contrast - reduced motion -
+accessible mobile navigation - meaningful alt text
+
+Mobile: - test key flows on small screens - reservation map must remain
+usable - quiz must be touch-friendly - admin must remain functional on
+smaller screens
+
+Do not sacrifice security or correctness for performance.
+
+Stop after Phase 13.
+
+PHASE 14 — FINAL QA + SECURITY + POLISH
+
+PROMPT:
+
+Perform a complete final QA and security audit of NOIRÉ.
+
+Test PUBLIC: - homepage - Tonight at NOIRÉ - mood menu - dish details -
+Find My Dish - Chef’s Desk - Source → Plate - Stories - Space -
+reservation
+
+Test CUSTOMER: - signup/signin - profile - reservations - favorites -
+journal - passport - reviews - notifications
+
+Test ADMIN: - dashboard - Tonight - menu - experiences - reservations -
+tables - chef notes - ingredients - stories - customers - passport -
+reviews - analytics - settings
+
+SECURITY: - Supabase RLS - authentication - admin authorization -
+server-side validation - reservation race conditions - customer data
+isolation - journal privacy - passport manipulation prevention - review
+ownership - favorite ownership - input validation - upload security -
+secret handling - service-role key exposure - API/server-action
+authorization
+
+BUSINESS LOGIC: - unavailable dishes - invalid reservations - duplicate
+reservations - cancelled/no-show handling - completed visit logic -
+passport milestones - story publish/expiry - experience availability -
+table availability - empty database states
+
+QUALITY: - TypeScript errors - lint - build - broken routes - broken
+links - console errors - hydration issues - loading states - error
+boundaries - mobile responsiveness - accessibility - SEO
+
+Do NOT rewrite the application from scratch. Fix issues surgically while
+preserving working functionality.
+
+After fixes, report: 1. QA summary 2. Security findings 3. Fixed issues
+4. Remaining issues 5. Production-readiness checklist
+
+Stop after Phase 14.
+
+NOIRÉ FINAL FEATURE MAP
+
+Public: - Cinematic Homepage - Tonight at NOIRÉ - Mood-Based Menu - Find
+My Dish - Dish Story - Chef’s Desk - Source → Plate - Tonight’s
+Stories - Restaurant Spaces - Visual Reservation - Choose Your
+Experience
+
+Customer: - Authentication - Profile - Reservations - Favorites -
+Reviews - Dining Journal - Dining Passport - Taste Preferences -
+Notifications
+
+Admin: - Overview - Tonight - Menu CMS - Experiences - Table
+Management - Reservations - Chef’s Desk CMS - Ingredient/Source CMS -
+Stories CMS - Customers - Passport - Reviews - Analytics - Settings
+
+Core Database: profiles restaurants categories menu_items
+menu_item_ingredients ingredients ingredient_sources tables reservations
+reservation_preferences dining_experiences dish_preferences
+taste_profiles favorites reviews dining_history dining_journal
+dining_passports passport_milestones chef_notes restaurant_stories
+gallery notifications
+
+Recommended Order: Phase 0 → Audit Phase 1 → Database Phase 2 → Auth
+Phase 3 → Public UI Phase 4 → Mood Menu Phase 5 → Find My Dish Phase 6 →
+Reservation Phase 7 → Experiences Phase 8 → Dining Journal Phase 9 →
+Dining Passport Phase 10 → Chef + Source Phase 11 → Admin Phase 12 →
+Analytics + Stories Phase 13 → SEO + Performance + Accessibility Phase
+14 → QA + Security + Polish
+
+IMPORTANT: Use one phase prompt at a time. After completing a phase,
+stop and wait for the next phase instruction.
